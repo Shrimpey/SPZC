@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using SPZC.Models;
 using System;
@@ -11,27 +12,40 @@ namespace SPZC.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private Random randomizer = new Random();
+        private static string currentRandomizedfnameValue = "";
+        private static string currentRandomizedlnameValue = "";
 
-        public HomeController(ILogger<HomeController> logger)
-        {
-            _logger = logger;
+        private string RandomizeSimple(string textToRandomize) {
+            int randomizedInt = int.Parse(textToRandomize) + randomizer.Next(0, 10000);
+            return randomizedInt.ToString();
+        }
+        private string DerandomizeSimple(string textToDerandomize) {
+            int derandomizedInt = int.Parse(textToDerandomize) - randomizer.Next(0, 10000);
+            return derandomizedInt.ToString();
         }
 
-        public IActionResult Index()
-        {
+        public ActionResult Index() {
+            ViewBag.Message = "[HttpGet] method was run.";
+            currentRandomizedfnameValue = RandomizeSimple("123456");
+            ViewBag.fnameID = currentRandomizedfnameValue;
+            currentRandomizedlnameValue = RandomizeSimple("123456");
+            ViewBag.lnameID = currentRandomizedlnameValue;
+            ViewBag.SubmittedValue = "not yet set";
+
             return View();
         }
 
-        public IActionResult Privacy()
-        {
-            return View();
-        }
+        [HttpPost]
+        public ActionResult Index(IFormCollection collection) {
+            ViewBag.Message = "[HttpPost] method was run.";
+            ViewBag.SubmittedValue = collection[currentRandomizedfnameValue] + ", " + collection[currentRandomizedlnameValue] + ". Ids used in previous form: " + currentRandomizedfnameValue + ", " + currentRandomizedlnameValue;
+            currentRandomizedfnameValue = RandomizeSimple("123456");
+            ViewBag.fnameID = currentRandomizedfnameValue;
+            currentRandomizedlnameValue = RandomizeSimple("123456");
+            ViewBag.lnameID = currentRandomizedlnameValue;
 
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            return View();
         }
     }
 }
