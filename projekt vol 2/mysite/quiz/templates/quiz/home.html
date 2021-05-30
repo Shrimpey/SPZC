@@ -1,0 +1,34 @@
+{% extends "quiz/base.html" %}
+{% block content %}
+    <div class="container mt-sm-5 my-1">
+        <h1>Who's Joe</h1>
+            {% for question in questions %}
+                <div class="question ml-sm-5 pl-sm-5 pt-2">
+                <div class="py-2 h5"><b>{{question.question}}</b></div>
+                <div class="ml-md-3 ml-sm-3 pl-md-5 pt-sm-0 pt-3" id="options">
+                {% for answer in question.answers %}
+                    <label class="options">{{answer.text}}<input type="radio" name="radio"> <span class="checkmark"></span></label>
+                {% endfor %}
+                </div>
+                </div>
+            {% endfor %}
+            <div class="d-flex align-items-center pt-3">
+                <div class="ml-auto mr-sm-5"> <button class="btn btn-success">Submit!</button> </div>
+            </div>
+
+    </div>
+<!--<div class="wrapper bg-white rounded">-->
+<!--    <div class="content"> <a href="#"><span class="fa fa-angle-left pr-2"></span>Back to Question Bank</a>-->
+<!--        <p class="text-muted">Multiple Choice Question</p>-->
+<!--        {% for question in questions %}-->
+<!--            <p class="text-justify h5 pb-2 font-weight-bold">{{question.question}}</p>-->
+<!--            <div class="options py-3">-->
+<!--                {% for answer in question.answers %}-->
+<!--                <label class="rounded p-2 option"> {{answer.text}} <input type="radio" name="radio"> <span class="crossmark"></span> </label>-->
+<!--                {% endfor %}-->
+<!--            <p class="mt-2 mb-4 pl-2 text-justify"> Well done! He was scared of flying so picked up the parachute from an support store before the trip. He won gold </p> <b>Incorrect Feedback</b>-->
+<!--            <p class="my-2 pl-2"> That was incorrect. Try again </p>-->
+<!--        {% endfor %}-->
+<!--    </div> <input type="submit" value="Add Question" class="mx-sm-0 mx-1">-->
+<!--    </div></div>-->
+{% endblock %}
