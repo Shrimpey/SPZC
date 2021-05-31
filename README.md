@@ -14,7 +14,7 @@ source venv/bin/activate
 pip3 install -r requirements.txt
 ```
 
-Żeby odpalić projekt na localhot, wbijasz do katalogu projekt vol 2 -> mysite, a następnie:
+Żeby odpalić projekt na localhost:
 ```
 python manage.py runserver
 ```
