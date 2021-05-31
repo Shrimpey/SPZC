@@ -3,7 +3,7 @@ Przed uruchomieniem projektu:
 Windows:
 ```
 python -m venv venv
-.v\env\Scripts\activate
+.\venv\Scripts\activate
 pip install -r requirements.txt
 ```
 
