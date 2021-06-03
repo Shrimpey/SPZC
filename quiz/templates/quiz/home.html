@@ -1,21 +1,15 @@
 {% extends "quiz/base.html" %}
 {% block content %}
     <div class="container mt-sm-5 my-1">
-        <h1>Who's Joe</h1>
-            {% for question in questions %}
-                <div class="question ml-sm-5 pl-sm-5 pt-2">
-                <div class="py-2 h5"><b>{{question.question}}</b></div>
-                <div class="ml-md-3 ml-sm-3 pl-md-5 pt-sm-0 pt-3" id="options">
-                {% for answer in question.answers %}
-                    <label class="options">{{answer.text}}<input type="radio" name="radio"> <span class="checkmark"></span></label>
-                {% endfor %}
-                </div>
-                </div>
-            {% endfor %}
-            <div class="d-flex align-items-center pt-3">
-                <div class="ml-auto mr-sm-5"> <button class="btn btn-success">Submit!</button> </div>
-            </div>
-
+      <form action="/" method="post">
+        <label for="{{fname}}">First name: </label>
+        <input id="{{fname}}" type="text" name="{{fname}}"><br>
+        <label for="{{lname}}">Last name: </label>
+        <input id="{{lname}}" type="text" name="{{lname}}"><br>
+        {% csrf_token %}
+        <input type="submit" value="OK">
+        <p class="mx-sm-0 mx-1">Chosen name: {{ current_name }}</p>
+      </form>
     </div>
 <!--<div class="wrapper bg-white rounded">-->
 <!--    <div class="content"> <a href="#"><span class="fa fa-angle-left pr-2"></span>Back to Question Bank</a>-->

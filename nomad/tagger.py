@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Tuple
 from bs4 import BeautifulSoup
 
 from nomad.randomizer import Randomizer
@@ -45,7 +45,7 @@ class Tagger:
                                                                    client_id='TODO')
         return str(soup)
 
-    def _get_tagged_elements(self, soup: BeautifulSoup) -> List[(str, str)]:
+    def _get_tagged_elements(self, soup: BeautifulSoup) -> List[Tuple[str, str]]:
         elements = []
         for e in soup():
             for attr_name, value in e.attrs.items():
@@ -53,7 +53,7 @@ class Tagger:
                     elements.append((attr_name, value))
         return list(set(elements))
 
-    def _get_randomized_elements(self, soup: BeautifulSoup) -> List[(str, str)]:
+    def _get_randomized_elements(self, soup: BeautifulSoup) -> List[Tuple[str, str]]:
         """
         This method finds all html elements with a special attribute
         If found, checks the value of said attr. This value describes a name of a randomized attribute.
