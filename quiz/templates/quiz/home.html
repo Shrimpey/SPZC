@@ -1,34 +1,61 @@
 {% extends "quiz/base.html" %}
 {% block content %}
-    <div class="container mt-sm-5 my-1">
-        <h1>Who's Joe</h1>
-            {% for question in questions %}
-                <div class="question ml-sm-5 pl-sm-5 pt-2">
-                <div class="py-2 h5"><b>{{question.question}}</b></div>
-                <div class="ml-md-3 ml-sm-3 pl-md-5 pt-sm-0 pt-3" id="options">
-                {% for answer in question.answers %}
-                    <label class="options">{{answer.text}}<input type="radio" name="radio"> <span class="checkmark"></span></label>
-                {% endfor %}
-                </div>
-                </div>
-            {% endfor %}
-            <div class="d-flex align-items-center pt-3">
-                <div class="ml-auto mr-sm-5"> <button class="btn btn-success">Submit!</button> </div>
-            </div>
+  <div class="innersite">
+    <div class="header">
+      <h1>NOMAD sandbox</h1>
+      <p>This is a development and testing sandbox environment for Nomad bot.</p>
+    </div>
+
+    <div class="main">
+      <div class="inputform">
+        <h3>Sample text-input form</h3>
+        <form action="/" method="post">
+          <label for="fname">First name: </label>
+          <input id="fname" type="text" name="fname"><br>
+          <label for="lname">Last name: </label>
+          <input id="lname" type="text" name="lname"><br>
+          {% csrf_token %}
+          <input id="submit" type="submit" value="Submit input form">
+          <p class="mx-sm-0 mx-1">Chosen name: {{ current_name }}</p>
+        </form>
+      </div>
+
+      <div class="radioform">
+        <h3>Sample radio-input form</h3>
+        <p class="mx-sm-0 mx-1">Select your favourite food:</p>
+        <form action="/" method="post">
+          <label for="pizza">Pizza</label>
+          <input id="pizza" type="radio" value="pizza" name="food">
+          <label for="burgers">Burgers</label>
+          <input id="burgers" type="radio" value="burgers" name="food">
+          <label for="pasta">Pasta</label>
+          <input id="pasta" type="radio" value="pasta" name="food">
+          <label for="bigos">Pyszny bigos</label>
+          <input id="bigos" type="radio" value="bigos" name="food"><br>
+          {% csrf_token %}
+          <input id="submit" type="submit" value="Submit radio form">
+          <p class="mx-sm-0 mx-1">Chosen food: {{ current_food }}</p>
+        </form>
+      </div>
+
+      <div class="otherform">
+        <h3>Sample form with other inputs</h3>
+        <form action="/" method="post">
+          <label for="color">Sample color: </label>
+          <input id="color" type="color" value="#f00" name="other"><br>
+          <label for="date">Sample date: </label>
+          <input id="date" type="date" value="01-01-1997" name="other"><br>
+          <label for="number">Sample number (0-100): </label>
+          <input id="number" type="number" value="0" name="other" min="0" max="100"><br>
+          {% csrf_token %}
+          <input id="submit" type="submit" value="Submit other fields form">
+          <p class="mx-sm-0 mx-1">Chosen options: {{ current_options }}</p>
+        </form>
+      </div>
 
     </div>
-<!--<div class="wrapper bg-white rounded">-->
-<!--    <div class="content"> <a href="#"><span class="fa fa-angle-left pr-2"></span>Back to Question Bank</a>-->
-<!--        <p class="text-muted">Multiple Choice Question</p>-->
-<!--        {% for question in questions %}-->
-<!--            <p class="text-justify h5 pb-2 font-weight-bold">{{question.question}}</p>-->
-<!--            <div class="options py-3">-->
-<!--                {% for answer in question.answers %}-->
-<!--                <label class="rounded p-2 option"> {{answer.text}} <input type="radio" name="radio"> <span class="crossmark"></span> </label>-->
-<!--                {% endfor %}-->
-<!--            <p class="mt-2 mb-4 pl-2 text-justify"> Well done! He was scared of flying so picked up the parachute from an support store before the trip. He won gold </p> <b>Incorrect Feedback</b>-->
-<!--            <p class="my-2 pl-2"> That was incorrect. Try again </p>-->
-<!--        {% endfor %}-->
-<!--    </div> <input type="submit" value="Add Question" class="mx-sm-0 mx-1">-->
-<!--    </div></div>-->
+    <div class="footer">
+      <p>Copyright ©2021, project for SPZC class, Michał Szpunar, Łukasz Kabat</p>
+    </div>
+  </div>
 {% endblock %}

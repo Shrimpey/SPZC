@@ -9,13 +9,19 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
     <meta charset="UTF-8">
     <link rel="stylesheet" type="text/css" href="{% static 'quiz/main.css' %}">
-    <title nomad>Quiz</title>
+    <title nomad>Nomad sandbox site</title>
 </head>
 <body>
 
 
     <div class="container">
         {% block content %}{% endblock %}
+    </div>
+
+    <div class="sidecontainer">
+        <p>Sample text of a side widget. This widget can be used as a filler to properly test sites with additional content.</p>
+        <p>Dummy button:</p>
+        <input id="submit" type="submit" value="Read more...">
     </div>
 </body>
 </html>
