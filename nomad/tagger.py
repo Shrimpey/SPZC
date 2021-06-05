@@ -11,8 +11,10 @@ class Tagger:
         self._randomizer = Randomizer()
 
     # TODO session_id ma być zbierane z django a client_id to ma być IP kolesia
-    def randomize_elements(self, html_doc: str) -> str:
+    def randomize_elements(self, html_doc: str, session_id: str, client_id: str) -> str:
         """
+        :param session_id:
+        :param client_id:
         :param html_doc: HTML document where attributes
         that have to be randomized are tagged with a special tag
 
@@ -25,13 +27,15 @@ class Tagger:
             for tag in soup.find_all(attrs={e[0]: e[1]}):
                 tag[self._special_attr] = e[0]
                 tag[e[0]] = self._randomizer.randomize_parameter(param_value=e[1],
-                                                                 session_id='TODO',
-                                                                 client_id='TODO')
+                                                                 session_id=session_id,
+                                                                 client_id=client_id)
         return str(soup)
 
     # TODO session_id ma być zbierane z django a client_id to ma być IP kolesia
-    def derandomize_elements(self, html_doc: str) -> str:
+    def derandomize_elements(self, html_doc: str, session_id: str, client_id: str) -> str:
         """
+        :param session_id:
+        :param client_id:
         :param html_doc: HTML document where attributes special attributes
         :return: an HTML document with derandomized values
         """
@@ -41,11 +45,11 @@ class Tagger:
             for tag in soup.find(attrs={e[0]: e[1]}):
                 tag[self._special_attr] = e[0]
                 tag[e[0]] = self._randomizer.derandomize_parameter(randomized_value=e[1],
-                                                                   session_id='TODO',
-                                                                   client_id='TODO')
+                                                                   session_id=session_id,
+                                                                   client_id=client_id)
         return str(soup)
 
-    def _get_tagged_elements(self, soup: BeautifulSoup) -> List[(str, str)]:
+    def _get_tagged_elements(self, soup: BeautifulSoup):
         elements = []
         for e in soup():
             for attr_name, value in e.attrs.items():
@@ -53,7 +57,7 @@ class Tagger:
                     elements.append((attr_name, value))
         return list(set(elements))
 
-    def _get_randomized_elements(self, soup: BeautifulSoup) -> List[(str, str)]:
+    def _get_randomized_elements(self, soup: BeautifulSoup):
         """
         This method finds all html elements with a special attribute
         If found, checks the value of said attr. This value describes a name of a randomized attribute.
