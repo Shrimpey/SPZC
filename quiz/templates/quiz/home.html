@@ -31,7 +31,7 @@
           <label for="pasta">Pasta</label>
           <input id="pasta" type="radio" value="pasta" name="food">
           <label for="bigos">Pyszny bigos</label>
-          <input id="bigos" type="radio" value="bigos" name="food"><br>
+          <input id="bigos" type="radio" value="pyszny bigos" name="food"><br>
           {% csrf_token %}
           <input id="submit" type="submit" value="Submit radio form">
           <p class="mx-sm-0 mx-1">Chosen food: {{ current_food }}</p>
@@ -42,11 +42,11 @@
         <h3>Sample form with other inputs</h3>
         <form action="/" method="post">
           <label for="color">Sample color: </label>
-          <input id="color" type="color" value="#f00" name="other"><br>
+          <input id="color" type="color" value="#f00" name="color"><br>
           <label for="date">Sample date: </label>
-          <input id="date" type="date" value="01-01-1997" name="other"><br>
+          <input id="date" type="date" value="01-01-1997" name="date"><br>
           <label for="number">Sample number (0-100): </label>
-          <input id="number" type="number" value="0" name="other" min="0" max="100"><br>
+          <input id="number" type="number" value="0" name="number" min="0" max="100"><br>
           {% csrf_token %}
           <input id="submit" type="submit" value="Submit other fields form">
           <p class="mx-sm-0 mx-1">Chosen options: {{ current_options }}</p>
