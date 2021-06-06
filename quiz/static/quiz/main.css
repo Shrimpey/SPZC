@@ -16,7 +16,36 @@ body {
     border-radius: 10px;
     padding: 20px;
     font-family: 'Montserrat', sans-serif;
-    max-width: 700px
+    max-width: 700px;
+    position: relative;
+}
+
+.sidecontainer {
+    background-color: #555;
+    color: #ddd;
+    border-radius: 10px;
+    padding: 20px;
+    font-family: 'Montserrat', sans-serif;
+    max-width: 200px;
+    position: absolute;
+    right: 20;
+    top: 20;
+}
+.sidecontainer input {
+    max-width: 150px;
+    font-size: 12px;
+    margin-left: 15%;
+    white-space: normal;
+}
+
+.main div {
+    background-color: #777;
+    color: #ddd;
+    border-radius: 10px;
+    padding: 20px;
+    font-family: 'Montserrat', sans-serif;
+    max-width: 700px;
+    margin-top:15px;
 }
 
 .container>p {
@@ -52,6 +81,59 @@ body {
     background-color: #555;
     border: 1px solid #ddd;
     border-radius: 50%
+}
+
+.main .inputform label {
+  line-height: 25px;
+  vertical-align: middle;
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+.main .inputform input#fname {
+  margin-left: 15px;
+}
+.main .inputform input#lname {
+  margin-left: 17px;
+}
+.main .inputform input#submit {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+.main .radioform label {
+  line-height: 25px;
+  vertical-align: middle;
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+.main .radioform input {
+  margin-right: 15px;
+}
+.main .radioform input#submit {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+.main .otherform label {
+  line-height: 25px;
+  vertical-align: middle;
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+.main .otherform input#color {
+  margin-left: 100px;
+}
+.main .otherform input#date {
+  margin-left: 105px;
+}
+.main .otherform input#number {
+  margin-left: 15px;
+}
+.main .otherform input#submit {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.footer {
+  margin-top: 25px;
 }
 
 .options input:checked~.checkmark:after {

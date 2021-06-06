@@ -1,31 +1,25 @@
 from django.shortcuts import render
 
 
-questions = [
-    {
-        'question': 'What is love',
-        'answers': [{'text': 'Baby dont hurt me'},
-                    {'text': 'Dont hurt me'},
-                    {'text': 'No more!'}]
-    },
-    {
-        'question': 'Who let the dogs out',
-        'answers': [{'text': 'Who'},
-                    {'text': 'You'},
-                    {'text': 'Me'}]
-    },
-    {
-        'question': 'Who is the president of US and A',
-        'answers': [{'text': 'Joe Biden'},
-                    {'text': 'Barack Obama'},
-                    {'text': 'Joe Mama'}]
-    }
-]
+chosenName = "None"
+chosenFood = "None"
+chosenColor = "None"
+chosenDate = "None"
+chosenNumber = "None"
 
 
 def home(request):
+
+    chosenName = request.POST.get('fname', 'None') + " " + request.POST.get('lname', 'None')
+    chosenFood = request.POST.get('food', 'None')
+    chosenColor = request.POST.get('color', 'None')
+    chosenDate = request.POST.get('date', 'None')
+    chosenNumber = request.POST.get('number', 'None')
+
     context = {
-        'questions': questions
+        'current_name': chosenName,
+        'current_food': chosenFood,
+        'current_options': chosenColor + ", " + chosenDate + ", " + chosenNumber,
     }
     return render(request, 'quiz/home.html', context)
 
