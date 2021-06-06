@@ -1,22 +1,38 @@
 import mechanize
 import ssl
+
 try:
-    _create_unverified_https_context = ssl._create_unverified_context
+    make_non_ssl_context = ssl._create_verified_context
 except AttributeError:
-    # Legacy Python that doesn't verify HTTPS certificates by default
     pass
 else:
-    # Handle target environment that doesn't support HTTPS verification
-    ssl._create_default_https_context = _create_unverified_https_context
+    ssl._create_default_https_context = make_non_ssl
+
+
+### Variables ---------------------------------------------
+printResponses = False
+### End variables -----------------------------------------
+
+
+# Initialize mechanize bot on localhost website
 br = mechanize.Browser()
 br.set_handle_robots(False)
-br.open("https://localhost:44307/")
+br.open("http://localhost:8000/")
+
+def PrintResponse(response):
+    if(printResponses):
+        print("Got response: \u001b[33m")
+        for r in response:
+            print(r)
+        print("\u001b[0m")
 
 
-
-# Dedicated scanner personalized for our website
-print("---------------------")
-print("Running advanced bot...")
+# ---------------------------------------------------------
+# Bot 1A - Scans website for any forms  -------------------
+#   Target: input text forms            -------------------
+#   Complexity: moderate                -------------------
+# ---------------------------------------------------------
+print("Running bot 1A (lname, fname scanner)...")
 formNames = []
 for form in br.forms():
     for control in form.controls:
@@ -24,31 +40,119 @@ for form in br.forms():
 br.select_form(nr=0)
 br.form[formNames[0]] = 'HACK1'
 br.form[formNames[1]] = 'HACK2'
-req = br.submit()
-if req:
-    print("Bot SUCCEEDED!")
-    print("Got response: \u001b[32m")
-    for r in req:
-        print(r)
-    print("\u001b[0m")
-
-
-
-
-
-# Simple scanner for fname and lname
+res = br.submit()
+if res:
+    print("\u001b[32m Bot SUCCEEDED! \u001b[0m")
+    PrintResponse(res)
+else:
+    print("\u001b[31m Bot FAILED! Got no response. \u001b[0m")
 print("---------------------")
-print("Running simple bot...")
+
+
+# ---------------------------------------------------------
+# Bot 1B - Scans website for any forms  -------------------
+#   Target: radio control               -------------------
+#   Complexity: moderate                -------------------
+# ---------------------------------------------------------
+print("Running bot 1B (pizza scanner)...")
+formNames.clear()
+selectedForm = 1
+for control in br.forms()[selectedForm].controls:
+    formNames.append(control.name)
+br.select_form(nr=selectedForm)
+br.form.find_control(formNames[0]).get("pizza").selected = True
+res = br.submit()
+if res:
+    print("\u001b[32m Bot SUCCEEDED! \u001b[0m")
+    PrintResponse(res)
+else:
+    print("\u001b[31m Bot FAILED! Got no response. \u001b[0m")
+print("---------------------")
+
+
+# ---------------------------------------------------------
+# Bot 1C - Scans website for any forms  -------------------
+#   Target: color, number, date         -------------------
+#   Complexity: moderate                -------------------
+# ---------------------------------------------------------
+print("Running bot 1C (color, date, number scanner)...")
+formNames.clear()
+selectedForm = 2
+for control in br.forms()[selectedForm].controls:
+    formNames.append(control.name)
+br.select_form(nr=selectedForm)
+br.form[formNames[0]] = "#666"
+br.form[formNames[1]] = "31-01-1997"
+br.form[formNames[2]] = "66"
+res = br.submit()
+if res:
+    print("\u001b[32m Bot SUCCEEDED! \u001b[0m")
+    PrintResponse(res)
+else:
+    print("\u001b[31m Bot FAILED! Got no response. \u001b[0m")
+print("---------------------")
+
+
+
+
+
+# ---------------------------------------------------------
+# Bot 2A - Scans for named forms        -------------------
+#   Target: input text forms            -------------------
+#   Complexity: simple                  -------------------
+# ---------------------------------------------------------
+print("Running bot 2A (lname, fname scanner)...")
 br.select_form(nr=0)
 try:
     br.form['fname'] = 'HACK1'
     br.form['lname'] = 'HACK2'
-    req = br.submit()
-    if req:
-        print("Got response: \u001b[32m")
-        for r in req:
-            print(r)
-        print("\u001b[0m")
+    res = br.submit()
+    if res:
+        print("\u001b[32m Bot SUCCEEDED! \u001b[0m")
+        PrintResponse(res)
+    else:
+        print("\u001b[31m Bot FAILED! Got no response. \u001b[0m")
 except mechanize._form_controls.ControlNotFoundError:
-    print("Bot FAILED!")
+    print("\u001b[31m Bot FAILED! Got no response. \u001b[0m")
+print("---------------------")
+
+
+# ---------------------------------------------------------
+# Bot 2B - Scans for named forms        -------------------
+#   Target: radio control               -------------------
+#   Complexity: simple                  -------------------
+# ---------------------------------------------------------
+print("Running bot 2B (pizza scanner)...")
+br.select_form(nr=1)
+try:
+    br.form.find_control("food").get("pizza").selected = True
+    res = br.submit()
+    if res:
+        print("\u001b[32m Bot SUCCEEDED! \u001b[0m")
+        PrintResponse(res)
+    else:
+        print("\u001b[31m Bot FAILED! Got no response. \u001b[0m")
+except mechanize._form_controls.ControlNotFoundError:
+    print("\u001b[31m Bot FAILED! Got no response. \u001b[0m")
+print("---------------------")
+
+# ---------------------------------------------------------
+# Bot 2C - Scans for named forms        -------------------
+#   Target: color, number, date         -------------------
+#   Complexity: simple                  -------------------
+# ---------------------------------------------------------
+print("Running bot 2C (color, date, number scanner)...")
+br.select_form(nr=2)
+try:
+    br.form['color'] = "#666"
+    br.form['date'] = "31-01-1997"
+    br.form['number'] = "66"
+    res = br.submit()
+    if res:
+        print("\u001b[32m Bot SUCCEEDED! \u001b[0m")
+        PrintResponse(res)
+    else:
+        print("\u001b[31m Bot FAILED! Got no response. \u001b[0m")
+except mechanize._form_controls.ControlNotFoundError:
+    print("\u001b[31m Bot FAILED! Got no response. \u001b[0m")
 print("---------------------")
