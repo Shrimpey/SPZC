@@ -96,6 +96,13 @@ print("---------------------")
 
 
 
+
+
+
+
+
+
+
 # ---------------------------------------------------------
 # Bot 2A - Scans for named forms        -------------------
 #   Target: input text forms            -------------------
@@ -147,6 +154,81 @@ try:
     br.form['color'] = "#666"
     br.form['date'] = "31-01-1997"
     br.form['number'] = "66"
+    res = br.submit()
+    if res:
+        print("\u001b[32m Bot SUCCEEDED! \u001b[0m")
+        PrintResponse(res)
+    else:
+        print("\u001b[31m Bot FAILED! Got no response. \u001b[0m")
+except mechanize._form_controls.ControlNotFoundError:
+    print("\u001b[31m Bot FAILED! Got no response. \u001b[0m")
+print("---------------------")
+
+
+
+
+
+
+
+
+
+
+# ---------------------------------------------------------
+# Bot 3A - Scans for id fields          -------------------
+#   Target: input text forms            -------------------
+#   Complexity: moderate                -------------------
+# ---------------------------------------------------------
+print("Running bot 3A (lname, fname scanner)...")
+try:
+    br.select_form(nr=0)
+    controlFName = br.form.find_control(id='fname')
+    controlLName = br.form.find_control(id='lname')
+    controlFName = "HACK1"
+    controlLName = "HACK1"
+    res = br.submit()
+    if res:
+        print("\u001b[32m Bot SUCCEEDED! \u001b[0m")
+        PrintResponse(res)
+    else:
+        print("\u001b[31m Bot FAILED! Got no response. \u001b[0m")
+except mechanize._form_controls.ControlNotFoundError:
+    print("\u001b[31m Bot FAILED! Got no response. \u001b[0m")
+print("---------------------")
+
+# ---------------------------------------------------------
+# Bot 3B - Scans for id fields          -------------------
+#   Target: radio control               -------------------
+#   Complexity: moderate                -------------------
+# ---------------------------------------------------------
+print("Running bot 3B (pizza scanner)...")
+try:
+    br.select_form(nr=1)
+    controlFName = br.form.find_control(id='pizza')
+    controlFName.get("pizza").selected = True
+    res = br.submit()
+    if res:
+        print("\u001b[32m Bot SUCCEEDED! \u001b[0m")
+        PrintResponse(res)
+    else:
+        print("\u001b[31m Bot FAILED! Got no response. \u001b[0m")
+except mechanize._form_controls.ControlNotFoundError:
+    print("\u001b[31m Bot FAILED! Got no response. \u001b[0m")
+print("---------------------")
+
+# ---------------------------------------------------------
+# Bot 3C - Scans for id fields          -------------------
+#   Target: color, number, date         -------------------
+#   Complexity: moderate                -------------------
+# ---------------------------------------------------------
+print("Running bot 3C (color, date, number scanner)...")
+try:
+    br.select_form(nr=2)
+    controlColor = br.form.find_control(id='color')
+    controlDate = br.form.find_control(id='date')
+    controlNumber = br.form.find_control(id='number')
+    controlColor = "#666"
+    controlDate = "31-01-1997"
+    controlNumber = "66"
     res = br.submit()
     if res:
         print("\u001b[32m Bot SUCCEEDED! \u001b[0m")
