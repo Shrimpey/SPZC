@@ -17,21 +17,24 @@ class NomadMiddleware:
         if measure_time:
             starttime = timer()
         # --- End time measurement related  ---
-        print(request.session.session_key)  # DEBUG
-        print(request.method == 'GET')
-        print(self.get_client_ip(request))
         if not request.session.exists(request.session.session_key):
             request.session.create()
 
-        response = self.get_response(request)
-
         if request.method == "GET":
+            response = self.get_response(request)
             response.content = self.tagger.randomize_elements(html_doc=response.content,
                                                               session_id=request.session.session_key,
                                                               client_id=self.get_client_ip(request))
-        elif request.method in ['POST', 'PUT']:
-            pass  # TODO Trzeba zamienić że przecież w poscie nie idzie html tylko json, czy coś innego
-            # Może coś takiego, że derandomizujemy htmla i tworzymy słownik {randomizowane_id : id}
+
+        if request.method in ['POST', 'PUT']:
+            self.tagger.derandomize_elements(request_form=request.POST,
+                                             session_id=request.session.session_key,
+                                             client_id=self.get_client_ip(request))
+
+            response = self.get_response(request)
+            response.content = self.tagger.randomize_elements(html_doc=response.content,
+                                                              session_id=request.session.session_key,
+                                                              client_id=self.get_client_ip(request))
 
         # ---   Time measurement related    ---
         if measure_time:

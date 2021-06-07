@@ -10,7 +10,7 @@ chosenNumber = "None"
 
 def home(request):
 
-    chosenName = request.POST.get('fname', 'None') + " " + request.POST.get('lname', 'None')
+    chosenName = request.POST.get('__RaNmE__fname', 'None') + " " + request.POST.get('lname', 'None')
     chosenFood = request.POST.get('food', 'None')
     chosenColor = request.POST.get('color', 'None')
     chosenDate = request.POST.get('date', 'None')
