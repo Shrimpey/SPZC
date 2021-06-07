@@ -10,7 +10,7 @@ measure_time = True
 class NomadMiddleware:
     def __init__(self, get_response):
         self.get_response = get_response
-        self.tagger = Tagger(parameter_tag='__RaNmE__')
+        self.tagger = Tagger()
 
     def __call__(self, request: WSGIRequest):
         # ---   Time measurement related    ---
@@ -30,7 +30,6 @@ class NomadMiddleware:
             self.tagger.derandomize_elements(request_form=request.POST,
                                              session_id=request.session.session_key,
                                              client_id=self.get_client_ip(request))
-
             response = self.get_response(request)
             response.content = self.tagger.randomize_elements(html_doc=response.content,
                                                               session_id=request.session.session_key,

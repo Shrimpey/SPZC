@@ -6,15 +6,25 @@ from nomad.randomizer import Randomizer
 
 
 class Tagger:
-    def __init__(self, parameter_tag: str):
-        self._parameter_tag = parameter_tag
+    _params_to_randomize = {}   # private dict where key: parameter type (like name) and
+                                # value is a list of parameter values (like "id1", "submit_btn" etc)
+
+    @staticmethod
+    def add_param_to_randomize(param_types: List[str], value: str):
+        for param_type in param_types:
+            if param_type not in Tagger._params_to_randomize.keys():
+                Tagger._params_to_randomize[param_type] = [value]
+            else:
+                Tagger._params_to_randomize[param_type].append(value)
+
+    def __init__(self):
         self._randomizer = Randomizer()
 
-    # TODO session_id ma być zbierane z django a client_id to ma być IP kolesia
+
     def randomize_elements(self, html_doc: str, session_id: str, client_id: str) -> str:
         """
-        :param session_id:
-        :param client_id:
+        :param session_id: current session key
+        :param client_id: client's IP address
         :param html_doc: HTML document where attributes
         that have to be randomized are tagged with a special tag
 
@@ -46,7 +56,8 @@ class Tagger:
         elements = []
         for e in soup():
             for attr_name, value in e.attrs.items():
-                if type(value) == str and value.startswith(self._parameter_tag):
+                if attr_name in self._params_to_randomize.keys() \
+                        and value in self._params_to_randomize[attr_name]:
                     elements.append((attr_name, value))
         return list(set(elements))
 

@@ -1,5 +1,6 @@
 from django.shortcuts import render
 
+from nomad.tagger import Tagger
 
 chosenName = "None"
 chosenFood = "None"
@@ -10,7 +11,9 @@ chosenNumber = "None"
 
 def home(request):
 
-    chosenName = request.POST.get('__RaNmE__fname', 'None') + " " + request.POST.get('lname', 'None')
+    Tagger.add_param_to_randomize(param_types=['name', 'id'], value='fname')
+
+    chosenName = request.POST.get('fname', 'None') + " " + request.POST.get('lname', 'None')
     chosenFood = request.POST.get('food', 'None')
     chosenColor = request.POST.get('color', 'None')
     chosenDate = request.POST.get('date', 'None')
