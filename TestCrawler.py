@@ -26,6 +26,12 @@ def PrintResponse(response):
             print(r)
         print("\u001b[0m")
 
+def ValidadeHack(inputString, response):
+    for r in response:
+        if( inputString in str(r) ):
+            return True
+    return False
+
 
 # ---------------------------------------------------------
 # Bot 1A - Scans website for any forms  -------------------
@@ -42,8 +48,11 @@ br.form[formNames[0]] = 'HACK1'
 br.form[formNames[1]] = 'HACK2'
 res = br.submit()
 if res:
-    print("\u001b[32m Bot SUCCEEDED! \u001b[0m")
     PrintResponse(res)
+    if( ValidadeHack("Chosen name: HACK1 HACK2", res) ):
+        print("\u001b[32m Bot SUCCEEDED! \u001b[0m")
+    else:
+        print("\u001b[31m Bot FAILED! Respond does not contain input variables. \u001b[0m")
 else:
     print("\u001b[31m Bot FAILED! Got no response. \u001b[0m")
 print("---------------------")
@@ -63,8 +72,11 @@ br.select_form(nr=selectedForm)
 br.form.find_control(formNames[0]).get("pizza").selected = True
 res = br.submit()
 if res:
-    print("\u001b[32m Bot SUCCEEDED! \u001b[0m")
     PrintResponse(res)
+    if( ValidadeHack("Chosen food: pizza", res) ):
+        print("\u001b[32m Bot SUCCEEDED! \u001b[0m")
+    else:
+        print("\u001b[31m Bot FAILED! Respond does not contain input variables. \u001b[0m")
 else:
     print("\u001b[31m Bot FAILED! Got no response. \u001b[0m")
 print("---------------------")
@@ -86,8 +98,11 @@ br.form[formNames[1]] = "31-01-1997"
 br.form[formNames[2]] = "66"
 res = br.submit()
 if res:
-    print("\u001b[32m Bot SUCCEEDED! \u001b[0m")
     PrintResponse(res)
+    if( ValidadeHack("Chosen options: #666, 31-01-1997, 66", res) ):
+        print("\u001b[32m Bot SUCCEEDED! \u001b[0m")
+    else:
+        print("\u001b[31m Bot FAILED! Respond does not contain input variables. \u001b[0m")
 else:
     print("\u001b[31m Bot FAILED! Got no response. \u001b[0m")
 print("---------------------")
@@ -115,8 +130,11 @@ try:
     br.form['lname'] = 'HACK2'
     res = br.submit()
     if res:
-        print("\u001b[32m Bot SUCCEEDED! \u001b[0m")
         PrintResponse(res)
+        if( ValidadeHack("Chosen name: HACK1 HACK2", res) ):
+            print("\u001b[32m Bot SUCCEEDED! \u001b[0m")
+        else:
+            print("\u001b[31m Bot FAILED! Respond does not contain input variables. \u001b[0m")
     else:
         print("\u001b[31m Bot FAILED! Got no response. \u001b[0m")
 except mechanize._form_controls.ControlNotFoundError:
@@ -135,8 +153,11 @@ try:
     br.form.find_control("food").get("pizza").selected = True
     res = br.submit()
     if res:
-        print("\u001b[32m Bot SUCCEEDED! \u001b[0m")
         PrintResponse(res)
+        if( ValidadeHack("Chosen food: pizza", res) ):
+            print("\u001b[32m Bot SUCCEEDED! \u001b[0m")
+        else:
+            print("\u001b[31m Bot FAILED! Respond does not contain input variables. \u001b[0m")
     else:
         print("\u001b[31m Bot FAILED! Got no response. \u001b[0m")
 except mechanize._form_controls.ControlNotFoundError:
@@ -156,8 +177,11 @@ try:
     br.form['number'] = "66"
     res = br.submit()
     if res:
-        print("\u001b[32m Bot SUCCEEDED! \u001b[0m")
         PrintResponse(res)
+        if( ValidadeHack("Chosen options: #666, 31-01-1997, 66", res) ):
+            print("\u001b[32m Bot SUCCEEDED! \u001b[0m")
+        else:
+            print("\u001b[31m Bot FAILED! Respond does not contain input variables. \u001b[0m")
     else:
         print("\u001b[31m Bot FAILED! Got no response. \u001b[0m")
 except mechanize._form_controls.ControlNotFoundError:
@@ -183,12 +207,15 @@ try:
     br.select_form(nr=0)
     controlFName = br.form.find_control(id='fname')
     controlLName = br.form.find_control(id='lname')
-    controlFName = "HACK1"
-    controlLName = "HACK1"
+    controlFName.value = "HACK1"
+    controlLName.value = "HACK2"
     res = br.submit()
     if res:
-        print("\u001b[32m Bot SUCCEEDED! \u001b[0m")
         PrintResponse(res)
+        if( ValidadeHack("Chosen name: HACK1 HACK2", res) ):
+            print("\u001b[32m Bot SUCCEEDED! \u001b[0m")
+        else:
+            print("\u001b[31m Bot FAILED! Respond does not contain input variables. \u001b[0m")
     else:
         print("\u001b[31m Bot FAILED! Got no response. \u001b[0m")
 except mechanize._form_controls.ControlNotFoundError:
@@ -207,8 +234,11 @@ try:
     controlFName.get("pizza").selected = True
     res = br.submit()
     if res:
-        print("\u001b[32m Bot SUCCEEDED! \u001b[0m")
         PrintResponse(res)
+        if( ValidadeHack("Chosen food: pizza", res) ):
+            print("\u001b[32m Bot SUCCEEDED! \u001b[0m")
+        else:
+            print("\u001b[31m Bot FAILED! Respond does not contain input variables. \u001b[0m")
     else:
         print("\u001b[31m Bot FAILED! Got no response. \u001b[0m")
 except mechanize._form_controls.ControlNotFoundError:
@@ -226,13 +256,16 @@ try:
     controlColor = br.form.find_control(id='color')
     controlDate = br.form.find_control(id='date')
     controlNumber = br.form.find_control(id='number')
-    controlColor = "#666"
-    controlDate = "31-01-1997"
-    controlNumber = "66"
+    controlColor.value = "#666"
+    controlDate.value = "31-01-1997"
+    controlNumber.value = "66"
     res = br.submit()
     if res:
-        print("\u001b[32m Bot SUCCEEDED! \u001b[0m")
         PrintResponse(res)
+        if( ValidadeHack("Chosen options: #666, 31-01-1997, 66", res) ):
+            print("\u001b[32m Bot SUCCEEDED! \u001b[0m")
+        else:
+            print("\u001b[31m Bot FAILED! Respond does not contain input variables. \u001b[0m")
     else:
         print("\u001b[31m Bot FAILED! Got no response. \u001b[0m")
 except mechanize._form_controls.ControlNotFoundError:
