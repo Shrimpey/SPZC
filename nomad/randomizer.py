@@ -1,12 +1,17 @@
+import os
 import re
+from typing import Optional
 
 import schedule
 import hashlib
 import base64
+import sqlite3
 
 from Crypto import Random
 from Crypto.Cipher import AES
 
+from data.create_db import *
+# from nomad.data.create_db import DB_NAME, create_db, TABLE_NAME
 
 SEED = 69
 
@@ -16,6 +21,13 @@ def xor_shift():
     for i in range(10):
         SEED = (SEED * 1664525 + 1013904223) & 0xFFFFFFFF
     return SEED
+
+# for sqlite purposes
+def dict_factory(cursor, row):
+    d = {}
+    for idx, col in enumerate(cursor.description):
+        d[col[0]] = row[idx]
+    return d
 
 
 class AESCipher:
@@ -58,15 +70,37 @@ class Randomizer:
         self._current_master_key = self._gen_master_key()
         schedule.every(time_slot_len).minutes.do(self._gen_master_key)
 
-        self._session_master_dict = {}  # {session_id : master_key}
-        schedule.every(time_slot_len).minutes.do(self._update_session_key_dict)
+        self._db = self._get_db_controller()
+        # self._session_master_dict = {}  # {session_id : master_key}
+        # schedule.every(time_slot_len).minutes.do(self._update_session_key_dict)
 
     @staticmethod
     def _gen_master_key():
         return xor_shift()
 
-    def _add_new_connection(self, session_id):
-        self._session_master_dict[session_id] = self._current_master_key
+    @staticmethod
+    def _get_db_controller() -> sqlite3.Connection:
+        if not os.path.isfile(f'./data/{DB_NAME}'):
+            create_db()
+        conn = sqlite3.connect(f'./data/{DB_NAME}')
+        conn.row_factory = dict_factory
+        return conn
+
+    def _get_master_key(self, session_id: str) -> Optional[str]:
+        c = self._db.cursor()
+        resp = list(c.execute(f"SELECT * FROM {TABLE_NAME} WHERE session_id = '{session_id}'"))
+        if resp:
+            return resp[0]['master_key']
+
+    def _add_new_connection(self, session_id: str):
+        c = self._db.cursor()
+        c.execute(f"INSERT INTO {TABLE_NAME} VALUES ('{session_id}', '{self._current_master_key}')")
+        self._db.commit()
+
+    def _get_all_session_ids(self):
+        c = self._db.cursor()
+        return [s_key['session_id']
+                for s_key in list(c.execute(f"SELECT session_id FROM {TABLE_NAME}"))]
 
     def _update_session_key_dict(self):  # TODO
         """
@@ -74,11 +108,11 @@ class Randomizer:
         """
         pass
 
-    def _get_session_key(self, session_id, client_id):
+    def _get_session_key(self, session_id: str, client_id: str) -> bytes:
         hash_container = hashlib.new(name=self._hashing_func)
-        if session_id not in self._session_master_dict.keys():
+        if session_id not in self._get_all_session_ids():
             self._add_new_connection(session_id)
-        master_key = self._session_master_dict[session_id]
+        master_key = self._get_master_key(session_id)
 
         hash_container.update(str(master_key).encode('UTF-8'))
         hash_container.update(str(client_id).encode('UTF-8'))
@@ -98,8 +132,8 @@ class Randomizer:
 
 if __name__ == '__main__':
     session = 'abc'
-    client = 'twuj stary'
-    parameter = 'bruhhhhhh'
+    client = 'AlbertEinstein'
+    parameter = 'someParam123'
     print(f'ORINAL KEY: {parameter}')
     r = Randomizer(time_slot_len=1)
     randomized = r.randomize_parameter(param_value=parameter, session_id=session, client_id=client)
