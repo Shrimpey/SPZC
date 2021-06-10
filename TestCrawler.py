@@ -1,5 +1,6 @@
 import mechanize
 import ssl
+import http.cookiejar
 
 try:
     make_non_ssl_context = ssl._create_verified_context
@@ -14,8 +15,17 @@ printResponses = False
 ### End variables -----------------------------------------
 
 
-# Initialize mechanize bot on localhost website
 br = mechanize.Browser()
+
+# Cookie Jar
+cj = http.cookiejar.LWPCookieJar()
+br.set_cookiejar(cj)
+
+
+# Follows refresh 0 but not hangs on refresh > 0
+br.set_handle_refresh(mechanize._http.HTTPRefreshProcessor(), max_time=1)
+
+# Initialize mechanize bot on localhost website
 br.set_handle_robots(False)
 br.open("http://localhost:8000/")
 
@@ -29,6 +39,7 @@ def PrintResponse(response):
 def ValidadeHack(inputString, response):
     for r in response:
         if( inputString in str(r) ):
+            print("\t> Found in response: " + str(r))
             return True
     return False
 
@@ -79,6 +90,7 @@ if res:
         print("\u001b[31m Bot FAILED! Respond does not contain input variables. \u001b[0m")
 else:
     print("\u001b[31m Bot FAILED! Got no response. \u001b[0m")
+
 print("---------------------")
 
 

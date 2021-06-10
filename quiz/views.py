@@ -8,10 +8,18 @@ chosenColor = "None"
 chosenDate = "None"
 chosenNumber = "None"
 
+def TagElements():
+    Tagger.add_param_to_randomize(param_types=['name', 'id'], value='fname')
+    Tagger.add_param_to_randomize(param_types=['name', 'id'], value='lname')
+    Tagger.add_param_to_randomize(param_types=['name', 'id'], value='pizza')
+    Tagger.add_param_to_randomize(param_types=['name', 'id'], value='food')
+    Tagger.add_param_to_randomize(param_types=['name', 'id'], value='color')
+    Tagger.add_param_to_randomize(param_types=['name', 'id'], value='number')
+    Tagger.add_param_to_randomize(param_types=['name', 'id'], value='date')
 
 def home(request):
 
-    Tagger.add_param_to_randomize(param_types=['name', 'id'], value='fname')
+    TagElements()
 
     chosenName = request.POST.get('fname', 'None') + " " + request.POST.get('lname', 'None')
     chosenFood = request.POST.get('food', 'None')

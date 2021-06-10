@@ -47,10 +47,13 @@ class Tagger:
         for key, value in request_form.copy().items():
             # check for base64
             if len(key.strip()) % 4 == 0:
-                derandomized_key = self._randomizer.derandomize_parameter(key,
-                                                                          session_id=session_id,
-                                                                          client_id=client_id)
-                request_form[derandomized_key] = value
+                try:
+                    derandomized_key = self._randomizer.derandomize_parameter(key,
+                                                                              session_id=session_id,
+                                                                              client_id=client_id)
+                    request_form[derandomized_key] = value
+                except ValueError:
+                    print("Got invalid value on request")
 
     def _get_tagged_elements(self, soup: BeautifulSoup):
         elements = []
@@ -60,5 +63,3 @@ class Tagger:
                         and value in self._params_to_randomize[attr_name]:
                     elements.append((attr_name, value))
         return list(set(elements))
-
-
