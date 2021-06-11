@@ -10,7 +10,7 @@ import sqlite3
 from Crypto import Random
 from Crypto.Cipher import AES
 
-from data.create_db import *
+from nomad.data.create_db import *
 # from nomad.data.create_db import DB_NAME, create_db, TABLE_NAME
 
 SEED = 69
@@ -70,7 +70,7 @@ class Randomizer:
         self._current_master_key = self._gen_master_key()
         schedule.every(time_slot_len).minutes.do(self._gen_master_key)
 
-        self._db = self._get_db_controller()
+        create_db(dir_path='nomad/data')
         # self._session_master_dict = {}  # {session_id : master_key}
         # schedule.every(time_slot_len).minutes.do(self._update_session_key_dict)
 
@@ -80,25 +80,28 @@ class Randomizer:
 
     @staticmethod
     def _get_db_controller() -> sqlite3.Connection:
-        if not os.path.isfile(f'./data/{DB_NAME}'):
-            create_db()
-        conn = sqlite3.connect(f'./data/{DB_NAME}')
+        # if not os.path.isfile(f'nomad/data/{DB_NAME}'):
+        #     create_db()
+        conn = sqlite3.connect(f'nomad/data/{DB_NAME}')
         conn.row_factory = dict_factory
         return conn
 
     def _get_master_key(self, session_id: str) -> Optional[str]:
-        c = self._db.cursor()
+        db = self._get_db_controller()
+        c = db.cursor()
         resp = list(c.execute(f"SELECT * FROM {TABLE_NAME} WHERE session_id = '{session_id}'"))
         if resp:
             return resp[0]['master_key']
 
     def _add_new_connection(self, session_id: str):
-        c = self._db.cursor()
+        db = self._get_db_controller()
+        c = db.cursor()
         c.execute(f"INSERT INTO {TABLE_NAME} VALUES ('{session_id}', '{self._current_master_key}')")
-        self._db.commit()
+        db.commit()
 
     def _get_all_session_ids(self):
-        c = self._db.cursor()
+        db = self._get_db_controller()
+        c = db.cursor()
         return [s_key['session_id']
                 for s_key in list(c.execute(f"SELECT session_id FROM {TABLE_NAME}"))]
 

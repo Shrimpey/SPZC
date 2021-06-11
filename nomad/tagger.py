@@ -53,7 +53,9 @@ class Tagger:
                                                                               client_id=client_id)
                     request_form[derandomized_key] = value
                 except ValueError:
-                    print("Got invalid value on request")
+                    # although this may look like base64,
+                    # it is not encrypted by nomad's randomizer
+                    pass
 
     def _get_tagged_elements(self, soup: BeautifulSoup):
         elements = []

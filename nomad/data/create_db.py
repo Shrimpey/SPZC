@@ -4,8 +4,9 @@ DB_NAME = 'masterkeys.db'
 TABLE_NAME = 'session_master'
 
 
-def create_db():
-    con = sqlite3.connect(f'./{DB_NAME}')
+def create_db(dir_path):
+    print('CREATING DB')
+    con = sqlite3.connect(f'{dir_path}/{DB_NAME}')
     cur = con.cursor()
     try:
         cur.execute(f'''CREATE TABLE {TABLE_NAME}
@@ -18,4 +19,4 @@ def create_db():
 
 
 if __name__ == '__main__':
-    create_db()
+    create_db('.')
