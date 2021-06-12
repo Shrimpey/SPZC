@@ -16,7 +16,7 @@
           <input id="lname" type="text" name="lname"><br>
           {% csrf_token %}
           <input id="submit" type="submit" value="Submit input form">
-          <p class="mx-sm-0 mx-1">Chosen name: {{ current_name }}</p>
+          <p class="mx-sm-0 mx-1" name="result1">Chosen name: {{ current_name }}</p>
         </form>
       </div>
 
@@ -34,7 +34,7 @@
           <input id="bigos" type="radio" value="pyszny bigos" name="food"><br>
           {% csrf_token %}
           <input id="submit" type="submit" value="Submit radio form">
-          <p class="mx-sm-0 mx-1">Chosen food: {{ current_food }}</p>
+          <p class="mx-sm-0 mx-1" name="result2">Chosen food: {{ current_food }}</p>
         </form>
       </div>
 
@@ -49,7 +49,7 @@
           <input id="number" type="number" value="0" name="number" min="0" max="100"><br>
           {% csrf_token %}
           <input id="submit" type="submit" value="Submit other fields form">
-          <p class="mx-sm-0 mx-1">Chosen options: {{ current_options }}</p>
+          <p class="mx-sm-0 mx-1" name="result3">Chosen options: {{ current_options }}</p>
         </form>
       </div>
 
