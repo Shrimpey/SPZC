@@ -56,8 +56,6 @@ br.open("http://localhost:8000/")
 
 
 # ---------------------------------------------------------
-# UNIVERSAL BOTS    ---------------------------------------
-# ---------------------------------------------------------
 #   BOT 1    ----------------------------------------------
 #       Targets nth form on site          -----------------
 #       fills all the fields and submits    ---------------
@@ -90,9 +88,9 @@ def run_bot_1(selectedForm : int):
     return False
 
 
-print("[" + ConsoleColors.CYAN + "UNIVERSAL BOT 1"  + ConsoleColors.RESET + "] Running on form 0: ")
+print("[" + ConsoleColors.CYAN + "BOT 1 - UNIVERSAL"  + ConsoleColors.RESET + "] Running on form 0: ")
 run_bot_1(0)
-print("[" + ConsoleColors.CYAN + "UNIVERSAL BOT 1"  + ConsoleColors.RESET + "] Running on form 2: ")
+print("[" + ConsoleColors.CYAN + "BOT 1 - UNIVERSAL"  + ConsoleColors.RESET + "] Running on form 2: ")
 run_bot_1(2)
 
 
@@ -130,12 +128,143 @@ def run_bot_2(selectedForm : int, controlNames = []):
         print(ConsoleColors.RED + "\tBot FAILED! " + ConsoleColors.RESET + "Could not submit.")
     return False
 
-print("[" + ConsoleColors.CYAN + "UNIVERSAL BOT 2"  + ConsoleColors.RESET + "] Running on form 0: ")
+print("[" + ConsoleColors.CYAN + "BOT 2 - UNIVERSAL"  + ConsoleColors.RESET + "] Running on form 0: ")
 run_bot_2(0, ["fname", "lname"])
 run_bot_2(0, ["fname"])
 run_bot_2(0, ["lname"])
-print("[" + ConsoleColors.CYAN + "UNIVERSAL BOT 2"  + ConsoleColors.RESET + "] Running on form 2: ")
+print("[" + ConsoleColors.PURPLE + "BOT 2 - SITE SPECIALIZED"  + ConsoleColors.RESET + "] Running on form 2: ")
 run_bot_2(2, ["color", "number", "date"])
 run_bot_2(2, ["color"])
 run_bot_2(2, ["number"])
 run_bot_2(2, ["date"])
+
+
+# ---------------------------------------------------------
+#   BOT 3    ----------------------------------------------
+#       Finds form and control with a given name ----------
+# ---------------------------------------------------------
+def run_bot_3(formName = "", controlNames = []):
+    formControls = []
+    br.select_form(name=formName)
+    for controlName in controlNames:
+        try:
+            controlFound = br.form.find_control(controlName)
+            if controlFound != None:
+                if not controlFound.readonly:
+                    try:
+                        br.form[controlFound.name] = "HaCkEd"
+                    except TypeError:
+                        pass
+        except mechanize._form_controls.ControlNotFoundError:
+            pass
+    try:
+        res = br.submit()
+        if res:
+            print_response(res)
+            if( validate_hack("HaCkEd", res) ):
+                print(ConsoleColors.GREEN + "\tBot SUCCEEDED!" + ConsoleColors.RESET)
+                return True
+            else:
+                print(ConsoleColors.RED + "\tBot FAILED! " + ConsoleColors.RESET + "Respond does not contain input variables.")
+        else:
+            print(ConsoleColors.RED + "\tBot FAILED! " + ConsoleColors.RESET + "Got no response.")
+    except:
+        print(ConsoleColors.RED + "\tBot FAILED! " + ConsoleColors.RESET + "Could not submit.")
+    return False
+
+
+print("[" + ConsoleColors.PURPLE + "BOT 3 - SITE SPECIALIZED"  + ConsoleColors.RESET + "] Running on form 'nameform': ")
+run_bot_3("nameform", ["fname", "lname"])
+run_bot_3("nameform", ["fname"])
+run_bot_3("nameform", ["lname"])
+
+print("[" + ConsoleColors.PURPLE + "BOT 3 - SITE SPECIALIZED"  + ConsoleColors.RESET + "] Running on form 'otherform': ")
+run_bot_3("otherform", ["number", "date", "color"])
+run_bot_3("otherform", ["number"])
+run_bot_3("otherform", ["date"])
+run_bot_3("otherform", ["color"])
+
+
+# ---------------------------------------------------------
+#   BOT 4    ----------------------------------------------
+#       Finds form with a specific class    ---------------
+#       and fills all the data in controls    -------------
+# ---------------------------------------------------------
+def run_bot_4(className = ""):
+    formControls = []
+    br.select_form(class_=lambda x: className in x)
+    for control in br.form.controls:
+        formControls.append(control.name)
+    for control in formControls:
+        if control != None:
+            if not br.form.find_control(control).readonly:
+                try:
+                    br.form[control] = "HaCkEd"
+                except TypeError:
+                    pass
+    try:
+        res = br.submit()
+        if res:
+            print_response(res)
+            if( validate_hack("HaCkEd", res) ):
+                print(ConsoleColors.GREEN + "\tBot SUCCEEDED!" + ConsoleColors.RESET)
+                return True
+            else:
+                print(ConsoleColors.RED + "\tBot FAILED! " + ConsoleColors.RESET + "Respond does not contain input variables.")
+        else:
+            print(ConsoleColors.RED + "\tBot FAILED! " + ConsoleColors.RESET + "Got no response.")
+    except:
+        print(ConsoleColors.RED + "\tBot FAILED! " + ConsoleColors.RESET + "Could not submit.")
+    return False
+
+print("[" + ConsoleColors.PURPLE + "BOT 4 - SITE SPECIALIZED"  + ConsoleColors.RESET + "] Running on form with class 'customformclass1': ")
+run_bot_4("customformclass1")
+print("[" + ConsoleColors.PURPLE + "BOT 4 - SITE SPECIALIZED"  + ConsoleColors.RESET + "] Running on form with class 'customformclass3': ")
+run_bot_4("customformclass3")
+
+
+# ---------------------------------------------------------
+#   BOT 5    ----------------------------------------------
+#       Finds form with a specific class    ---------------
+#       and specified controlNames          ---------------
+# ---------------------------------------------------------
+def run_bot_5(className = "", controlNames = []):
+    formControls = []
+    br.select_form(class_=lambda x: className in x)
+    for controlName in controlNames:
+        try:
+            controlFound = br.form.find_control(controlName)
+            if controlFound != None:
+                if not controlFound.readonly:
+                    try:
+                        br.form[controlFound.name] = "HaCkEd"
+                    except TypeError:
+                        pass
+        except mechanize._form_controls.ControlNotFoundError:
+            pass
+    try:
+        res = br.submit()
+        if res:
+            print_response(res)
+            if( validate_hack("HaCkEd", res) ):
+                print(ConsoleColors.GREEN + "\tBot SUCCEEDED!" + ConsoleColors.RESET)
+                return True
+            else:
+                print(ConsoleColors.RED + "\tBot FAILED! " + ConsoleColors.RESET + "Respond does not contain input variables.")
+        else:
+            print(ConsoleColors.RED + "\tBot FAILED! " + ConsoleColors.RESET + "Got no response.")
+    except:
+        print(ConsoleColors.RED + "\tBot FAILED! " + ConsoleColors.RESET + "Could not submit.")
+    return False
+
+
+print("[" + ConsoleColors.PURPLE + "BOT 5 - SITE SPECIALIZED"  + ConsoleColors.RESET + "] Running on form with class 'customformclass1': ")
+run_bot_5("customformclass1", ["fname", "lname"])
+run_bot_5("customformclass1", ["fname"])
+run_bot_5("customformclass1", ["lname"])
+
+print("[" + ConsoleColors.PURPLE + "BOT 5 - SITE SPECIALIZED"  + ConsoleColors.RESET + "] Running on form with class 'customformclass3': ")
+run_bot_5("customformclass3", ["number", "date", "color"])
+run_bot_5("customformclass3", ["number"])
+run_bot_5("customformclass3", ["date"])
+run_bot_5("customformclass3", ["color"])
