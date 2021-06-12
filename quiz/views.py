@@ -21,7 +21,7 @@ def tag_elements():
 
 def home(request):
 
-    tag_elements()
+    #tag_elements()
 
     chosen_name = request.POST.get('fname', 'None') + " " + request.POST.get('lname', 'None')
     chosen_food = request.POST.get('food', 'None')
